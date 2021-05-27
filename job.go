@@ -134,6 +134,37 @@ func (a Admin) AddJob(p AddJobParam) (id uint, err error) {
 	return id, nil
 }
 
+func (a Admin) TriggerJob(jobID uint, executorParam string, addressList string) (err error) {
+	req := requests.Requests()
+
+	for _, cooike := range a.Cookies {
+		req.SetCookie(cooike)
+	}
+
+	data := requests.Datas{
+		"id":            fmt.Sprint(jobID),
+		"executorParam": executorParam,
+		"addressList":   addressList,
+	}
+
+	resp, err := req.Post(a.Url+"/jobinfo/trigger", data)
+	if err != nil {
+		return err
+	}
+
+	var rte Rte
+	err = json.Unmarshal(resp.Content(), &rte)
+	if err != nil {
+		return err
+	}
+
+	if rte.Code != 200 {
+		return errors.New(rte.Msg)
+	}
+
+	return nil
+}
+
 func (a Admin) RemoveJob(jobID uint) (err error) {
 	req := requests.Requests()
 

@@ -68,4 +68,11 @@ func main() {
 
 	log.Println(jobInfoList)
 
+	err = xj.TriggerJob(2, "test2", "")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("tigger job...")
+
 }
