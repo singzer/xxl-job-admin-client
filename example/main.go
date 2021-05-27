@@ -20,11 +20,52 @@ func main() {
 
 	log.Println(chartInfo)
 
-	jobInfo, err := xj.GetJobInfo(xxl.JobInfoParam{JobGroup: 2, Start: 0, Length: 20})
+	job := xxl.AddJobParam{
+		JobGroup:              2,
+		JobDesc:               "TEST",
+		ExecutorRouteStrategy: "FIRST",
+		CronGenDisplay:        "* * * * * ?",
+		JobCron:               "* * * * * ?",
+		GlueType:              "BEAN",
+		ExecutorHandler:       "test.task",
+		ExecutorBlockStrategy: "SERIAL_EXECUTION",
+		//ChildJobId:             []unit{1,2},
+		ExecutorTimeout:        0,
+		ExecutorFailRetryCount: 0,
+		Author:                 "icepie",
+		// AlarmEmail:             "",
+		// ExecutorParam:          "",
+		// GlueRemark:             "",
+		// GlueSource:             "",
+	}
+
+	jobID, err := xj.AddJob(job)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("add job:", jobID)
+
+	jobInfo, err := xj.GetJobInfo(xxl.GetJobInfoParam{JobGroup: 2, Start: 0, Length: 20})
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	log.Println(jobInfo)
+
+	err = xj.RemoveJob(jobID)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("remove job:", jobID)
+
+	jobInfoList, err := xj.GetJobsByGroup(2)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println(jobInfoList)
 
 }
