@@ -134,6 +134,53 @@ func (a Admin) AddJob(p AddJobParam) (id uint, err error) {
 	return id, nil
 }
 
+func (a Admin) UpdateJob(jobID uint, p AddJobParam) (err error) {
+
+	req := requests.Requests()
+
+	for _, cooike := range a.Cookies {
+		req.SetCookie(cooike)
+	}
+
+	data := requests.Datas{
+		"jobGroup":               fmt.Sprint(p.JobGroup),
+		"jobDesc":                p.JobDesc,
+		"executorRouteStrategy":  p.ExecutorRouteStrategy,
+		"cronGen_display":        p.CronGenDisplay,
+		"jobCron":                p.JobCron,
+		"glueType":               p.GlueType,
+		"executorHandler":        p.ExecutorHandler,
+		"executorBlockStrategy":  p.ExecutorBlockStrategy,
+		"childJobId":             idSilceToString(p.ChildJobId),
+		"executorTimeout":        fmt.Sprint(p.ExecutorTimeout),
+		"executorFailRetryCount": fmt.Sprint(p.ExecutorFailRetryCount),
+		"author":                 p.Author,
+		"alarmEmail":             p.AlarmEmail,
+		"executorParam":          p.ExecutorParam,
+		"glueRemark":             p.GlueRemark,
+		"glueSource":             p.GlueSource,
+		"id":                     fmt.Sprint(jobID),
+	}
+
+	resp, err := req.Post(a.Url+"/jobinfo/add", data)
+	if err != nil {
+		return err
+	}
+
+	var rte Rte
+	err = json.Unmarshal(resp.Content(), &rte)
+	if err != nil {
+		return err
+	}
+
+	if rte.Code != 200 {
+		return errors.New(rte.Msg)
+	}
+
+	return nil
+
+}
+
 func (a Admin) TriggerJob(jobID uint, executorParam string, addressList string) (err error) {
 	req := requests.Requests()
 
@@ -177,6 +224,64 @@ func (a Admin) RemoveJob(jobID uint) (err error) {
 	}
 
 	resp, err := req.Post(a.Url+"/jobinfo/remove", data)
+	if err != nil {
+		return err
+	}
+
+	var rte Rte
+	err = json.Unmarshal(resp.Content(), &rte)
+	if err != nil {
+		return err
+	}
+
+	if rte.Code != 200 {
+		return errors.New(rte.Msg)
+	}
+
+	return nil
+}
+
+func (a Admin) StartJob(jobID uint) (err error) {
+	req := requests.Requests()
+
+	for _, cooike := range a.Cookies {
+		req.SetCookie(cooike)
+	}
+
+	data := requests.Datas{
+		"id": fmt.Sprint(jobID),
+	}
+
+	resp, err := req.Post(a.Url+"/jobinfo/start", data)
+	if err != nil {
+		return err
+	}
+
+	var rte Rte
+	err = json.Unmarshal(resp.Content(), &rte)
+	if err != nil {
+		return err
+	}
+
+	if rte.Code != 200 {
+		return errors.New(rte.Msg)
+	}
+
+	return nil
+}
+
+func (a Admin) StopJob(jobID uint) (err error) {
+	req := requests.Requests()
+
+	for _, cooike := range a.Cookies {
+		req.SetCookie(cooike)
+	}
+
+	data := requests.Datas{
+		"id": fmt.Sprint(jobID),
+	}
+
+	resp, err := req.Post(a.Url+"/jobinfo/stop", data)
 	if err != nil {
 		return err
 	}

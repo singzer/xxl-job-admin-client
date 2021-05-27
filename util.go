@@ -14,5 +14,4 @@ func idSilceToString(ids []uint) (rte string) {
 	}
 
 	return rte
-
 }

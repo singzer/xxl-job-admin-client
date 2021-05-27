@@ -53,12 +53,12 @@ func main() {
 
 	log.Println(jobInfo)
 
-	err = xj.RemoveJob(jobID)
+	job.JobDesc = "edit"
+
+	err = xj.UpdateJob(jobID, job)
 	if err != nil {
 		log.Fatalln(err)
 	}
-
-	log.Println("remove job:", jobID)
 
 	jobInfoList, err := xj.GetJobsByGroup(2)
 
@@ -68,11 +68,32 @@ func main() {
 
 	log.Println(jobInfoList)
 
+	err = xj.RemoveJob(jobID)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("remove job:", jobID)
+
 	err = xj.TriggerJob(2, "test2", "")
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	log.Println("tigger job...")
+
+	err = xj.StopJob(2)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("stop job...")
+
+	err = xj.StartJob(2)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("start job...")
 
 }
