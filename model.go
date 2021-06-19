@@ -23,13 +23,19 @@ type Rte struct {
 
 type AddJobParam struct {
 	JobGroup               uint
+	ScheduleType           string
 	JobDesc                string
 	ExecutorRouteStrategy  string
 	CronGenDisplay         string
+	ScheduleConf           string
+	ScheduleConfCRON       string
+	ScheduleConfFixRate    string
+	ScheduleConfFIXDelay   string
 	JobCron                string
 	GlueType               string
 	ExecutorHandler        string
 	ExecutorBlockStrategy  string
+	MisfireStrategy        string
 	ChildJobId             []uint
 	ExecutorTimeout        int
 	ExecutorFailRetryCount int
