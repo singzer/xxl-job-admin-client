@@ -173,9 +173,10 @@ func (a Admin) UpdateJob(jobID uint, p AddJobParam) (err error) {
 		"executorParam":           p.ExecutorParam,
 		"glueRemark":              p.GlueRemark,
 		"glueSource":              p.GlueSource,
+		"id":                      fmt.Sprint(jobID),
 	}
 
-	resp, err := req.Post(a.Url+"/jobinfo/add", data)
+	resp, err := req.Post(a.Url+"/jobinfo/update", data)
 	if err != nil {
 		return err
 	}
