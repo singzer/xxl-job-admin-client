@@ -100,6 +100,7 @@ func (a Admin) AddJob(p AddJobParam) (id uint, err error) {
 		"executorRouteStrategy":   p.ExecutorRouteStrategy,
 		"cronGen_display":         p.CronGenDisplay,
 		"jobCron":                 p.JobCron,
+		"scheduleConf":            p.ScheduleConf,
 		"schedule_conf_CRON":      p.ScheduleConfCRON,
 		"schedule_conf_FIX_RATE":  p.ScheduleConfFixRate,
 		"schedule_conf_FIX_DELAY": p.ScheduleConfFIXDelay,
@@ -116,6 +117,8 @@ func (a Admin) AddJob(p AddJobParam) (id uint, err error) {
 		"glueRemark":              p.GlueRemark,
 		"glueSource":              p.GlueSource,
 	}
+
+	fmt.Println(data)
 
 	resp, err := req.Post(a.Url+"/jobinfo/add", data)
 	if err != nil {
@@ -148,23 +151,28 @@ func (a Admin) UpdateJob(jobID uint, p AddJobParam) (err error) {
 	}
 
 	data := requests.Datas{
-		"jobGroup":               fmt.Sprint(p.JobGroup),
-		"jobDesc":                p.JobDesc,
-		"executorRouteStrategy":  p.ExecutorRouteStrategy,
-		"cronGen_display":        p.CronGenDisplay,
-		"jobCron":                p.JobCron,
-		"glueType":               p.GlueType,
-		"executorHandler":        p.ExecutorHandler,
-		"executorBlockStrategy":  p.ExecutorBlockStrategy,
-		"childJobId":             idSilceToString(p.ChildJobId),
-		"executorTimeout":        fmt.Sprint(p.ExecutorTimeout),
-		"executorFailRetryCount": fmt.Sprint(p.ExecutorFailRetryCount),
-		"author":                 p.Author,
-		"alarmEmail":             p.AlarmEmail,
-		"executorParam":          p.ExecutorParam,
-		"glueRemark":             p.GlueRemark,
-		"glueSource":             p.GlueSource,
-		"id":                     fmt.Sprint(jobID),
+		"jobGroup":                fmt.Sprint(p.JobGroup),
+		"jobDesc":                 p.JobDesc,
+		"scheduleType":            p.ScheduleType,
+		"executorRouteStrategy":   p.ExecutorRouteStrategy,
+		"cronGen_display":         p.CronGenDisplay,
+		"jobCron":                 p.JobCron,
+		"scheduleConf":            p.ScheduleConf,
+		"schedule_conf_CRON":      p.ScheduleConfCRON,
+		"schedule_conf_FIX_RATE":  p.ScheduleConfFixRate,
+		"schedule_conf_FIX_DELAY": p.ScheduleConfFIXDelay,
+		"glueType":                p.GlueType,
+		"executorHandler":         p.ExecutorHandler,
+		"executorBlockStrategy":   p.ExecutorBlockStrategy,
+		"childJobId":              idSilceToString(p.ChildJobId),
+		"misfireStrategy":         p.MisfireStrategy,
+		"executorTimeout":         fmt.Sprint(p.ExecutorTimeout),
+		"executorFailRetryCount":  fmt.Sprint(p.ExecutorFailRetryCount),
+		"author":                  p.Author,
+		"alarmEmail":              p.AlarmEmail,
+		"executorParam":           p.ExecutorParam,
+		"glueRemark":              p.GlueRemark,
+		"glueSource":              p.GlueSource,
 	}
 
 	resp, err := req.Post(a.Url+"/jobinfo/add", data)
